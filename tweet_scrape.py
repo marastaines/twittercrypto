@@ -1,50 +1,64 @@
-import tweepy
-import time
 import json
 import smtplib
-import sys
+import time
 
-auth = tweepy.OAuthHandler("""PUT AUTH STUFF HERE""")
-auth.set_access_token("""PUT ACCESS TOKEN HERE""")
+import tweepy
 
-api = tweepy.API(auth)
+from os import environ
 
-terms = ["bitcoin", "BTC", 
-		 "bitcoin cash", "BCH", 
-		 "ethereum", "ETH", "ether",
-		 "ripple", "XRP",
-		 "litecoin", "LTC",
-		 "cryptocurrency", "crypto", "altcoin", "blockchain", 
-		 ]
+TERMS = [
+    "bitcoin", "BTC",
+    "bitcoin cash", "BCH",
+    "ethereum", "ETH", "ether",
+    "ripple", "XRP",
+    "litecoin", "LTC",
+    "cryptocurrency", "crypto", "altcoin", "blockchain",
+]
 
-global count
-global timer
-count = 0
 
-global file_out 
-file_out = open(sys.argv[1], "w+")
 class MyStreamListener(tweepy.StreamListener):
 
-	def on_status(self, status):
-		global file_out
-		try:
-			tweet = {"id" : status.id_str,
-					 "text" : status.text,
-					 "hashtags" : status.entities.get('hashtags'),
-					 "retweets" : status.retweet_count,
-					 "user_id" : status.user.id_str,
-					 "time" : str(status.created_at)
-					}
-			file_out.write(json.dumps(tweet) + "\n")
-			count += 1
-		except:
-			pass
-			
-	def on_error(self, status_code):
-		return False
+    def __init__(path):
+        self.path = path
+        self.file_out = None
 
-streamlistener = MyStreamListener()
+    def __enter__(self):
+        self.file_out = open(path, 'a')
+        return self
 
-stream = tweepy.Stream(auth=api.auth, listener=streamlistener)
-stream.filter(track=terms)
-stream.disconnect()
+    def __exit__(self, *args):
+        self.file_out.close()
+
+    def on_status(self, status):
+        try:
+            tweet = {
+                "id" : status.id_str,
+                "text" : status.text,
+                "hashtags" : status.entities.get('hashtags'),
+                "retweets" : status.retweet_count,
+                "user_id" : status.user.id_str,
+                "time" : str(status.created_at)
+            }
+            file_out.write(json.dumps(tweet) + "\n")
+        except:
+            pass
+
+    def on_error(self, status_code):
+        return False
+
+
+def main():
+    from sys import argv
+    auth = tweepy.OAuthHandler(environ.get('TWEEPY_HANDLE'))
+    auth.set_access_token(environ.get('TWEEPY_TOKEN'))
+    api = tweepy.API(auth)
+
+    with MyStreamListener(argv[1]) as streamlistener:
+        stream = tweepy.Stream(auth=api.auth, listener=streamlistener)
+        stream.filter(track=TERMS)
+        stream.disconnect()
+
+
+if __name__ == '__main__':
+    from sys import exit
+    exit(main())
