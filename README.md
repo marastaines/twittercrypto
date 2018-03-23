@@ -16,4 +16,4 @@ Please set the environment variables `TWEEPY_HANDLE` (for the tweepy OAuthHandle
 
 tweet_scrape starts running fine, appending to output file. But when I check on it after a couple hours, the process is dead and the text file exists but with nothing in it.
 
-coin_scrape.py runs as expected. It is currently configured to append the price of BTC, BCH, ETH, RPL, and XRP to prices.txt once every minute.
+price_scrape.py runs as expected. It is currently configured to append the price of BTC, BCH, ETH, RPL, and XRP to prices.txt once every minute.
