@@ -1,19 +1,47 @@
 # twittercrypto
 
-## Use:
+Forecasting cryptocurrency prices with Twitter data.
 
-    $ python tweet_scrape.py <output_file>
+## Installation
 
-    $ python is_running.py
+Please ensure you are using a valid installation of Python 3, and run the
+following to install the project's dependencies:
 
-Note:
+    $ pip install --user -r requirements.txt
 
-Pretty please use your own twitter account codes for OAuth if you're running tweet_scrape. If you don't have an account or whatever, I can send you mine, but I'm not gonna leave them in a public repo haha.
+## Usage
 
-Please set the environment variables `TWEEPY_HANDLE` (for the tweepy OAuthHandler argument) and `TWEEPY_TOKEN` (for the twitter access token) before running.
+To build the dataset, we stream tweets directly from the Twitter API. You
+can start streaming tweets into a file with the `tweet_scrape` module:
 
-## Status:
+    $ pwd
+    /my/path/to/twittercrypto
+    $ python -m src.tweet_scrape --help
+    usage: tweet_scrape.py [-h] [-o OUTPUT] [--consumerkey CONSUMERKEY]
+                           [--consumersecret CONSUMERSECRET]
+                           [--accesskey ACCESSKEY] [--accesssecret ACCESSSECRET]
 
-tweet_scrape starts running fine, appending to output file. But when I check on it after a couple hours, the process is dead and the text file exists but with nothing in it.
+    Stream tweets into a file.
 
-price_scrape.py runs as expected. It is currently configured to append the price of BTC, BCH, ETH, RPL, and XRP to prices.txt once every minute.
+    optional arguments:
+      -h, --help            show this help message and exit
+      -o OUTPUT, --output OUTPUT
+                            destination for json data
+      --consumerkey CONSUMERKEY
+      --consumersecret CONSUMERSECRET
+      --accesskey ACCESSKEY
+      --accesssecret ACCESSSECRET
+
+Please find the appropriate keys and secrets in the Twitter developer portal at
+[apps.twitter.com](https://apps.twitter.com) (you will need to register an
+application in order to obtain these credentials).
+
+## Status
+
+We are currently assembling an archive of tweets by keeping `tweet_scrape.py`
+running on a server. `price_scrape.py` has also been successful in retrieving
+current and historical data on the prices of various currencies.
+
+The next steps will be to curate our historical dataset and provide initial
+analysis, and, at the same time, prepare our real-time models to accept and
+act on tweets streamed directly from `tweet_scrape`.
