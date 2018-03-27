@@ -36,6 +36,26 @@ Please find the appropriate keys and secrets in the Twitter developer portal at
 [apps.twitter.com](https://apps.twitter.com) (you will need to register an
 application in order to obtain these credentials).
 
+To start streaming currency price data, please use the `price_scrape` module
+provided in `src/`:
+
+    $ pwd
+    /my/path/to/twittercrypto
+    $ python -m src.price_scrape --help
+    usage: price_scrape.py [-h] [-o OUTPUT] [-d DELAY] COIN [COIN ...]
+
+    Get realtime data on crypto prices
+
+    positional arguments:
+      COIN                  currencies to track
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -o OUTPUT, --output OUTPUT
+                            path to save location
+      -d DELAY, --delay DELAY
+                            seconds to sleep between scans (default:60)
+
 ## Status
 
 We are currently assembling an archive of tweets by keeping `tweet_scrape.py`
