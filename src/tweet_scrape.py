@@ -8,6 +8,7 @@ created: MAR 2018
 '''
 
 import tweepy
+from json import dumps
 from wbutil import PersistentDict
 
 TERMS = [
@@ -22,14 +23,29 @@ TERMS = [
 
 class MyStreamListener(tweepy.StreamListener):
 
-    def __init__(self, path, api, batch_size=100):
-        self.data = PersistentDict({'tweets': []}, path=path)
+    def __init__(self, path, api, batch_size=1000):
+        self.path = path
         self.api = api
         self.batch_size = batch_size
+        self.count = 0
+
+    def __enter__(self):
+        self.fs = open(self.path, 'a')
+        self.batch = []
+        return self
+
+    def __exit__(self, *args):
+        self.write_batch()
+        self.fs.close()
+
+    def write_batch(self):
+        fs.write('\n'.join(self.batch))
+        self.batch.clear()
 
     def on_status(self, status):
-        print(('Got tweet %d' % len(self.data['tweets'])), '\r', end='')
         try:
+            self.count += 1
+            print(('Got tweet %d' % self.count), '\r', end='')
             tweet = {
                 "id": status.id_str,
                 "text": status.text,
@@ -38,11 +54,9 @@ class MyStreamListener(tweepy.StreamListener):
                 "user_id": status.user.id_str,
                 "time": str(status.created_at)
             }
-            self.data['tweets'].append(tweet)
-            if len(self.data['tweets']) % self.batch_size == 0:
-                print('Writing batch. Saving %d tweets...'
-                      % (len(self.data['tweets'])))
-                self.data.save()
+            self.batch.append(dumps(tweet))
+            if len(self.batch) >= self.batch_size:
+                self.write_batch()
         except Exception:
             pass
 
@@ -65,12 +79,12 @@ def main():
     auth.set_access_token(key=args.accesskey, secret=args.accesssecret)
     api = tweepy.API(auth)
 
-    streamlistener = MyStreamListener(args.output, api)
-    stream = tweepy.Stream(auth=api.auth, listener=streamlistener)
-    try:
-        stream.filter(track=TERMS)
-    finally:
-        stream.disconnect()
+    with MyStreamListener(args.output, api) as streamlistener:
+        stream = tweepy.Stream(auth=api.auth, listener=streamlistener)
+        try:
+            stream.filter(track=TERMS)
+        finally:
+            stream.disconnect()
 
 
 if __name__ == '__main__':
