@@ -39,7 +39,7 @@ class MyStreamListener(tweepy.StreamListener):
         self.fs.close()
 
     def write_batch(self):
-        fs.write('\n'.join(self.batch))
+        self.fs.write('\n'.join(self.batch))
         self.batch.clear()
 
     def on_status(self, status):
