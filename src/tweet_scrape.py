@@ -27,7 +27,11 @@ class MyStreamListener(tweepy.StreamListener):
         self.path = path
         self.api = api
         self.batch_size = batch_size
-        self.count = 0
+        try:
+            with open(path) as fs:
+                self.count = sum(1 for _ in fs)
+        except FileNotFoundError:
+            self.count = 0
 
     def __enter__(self):
         self.fs = open(self.path, 'a')
