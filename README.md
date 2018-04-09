@@ -65,3 +65,10 @@ current and historical data on the prices of various currencies.
 The next steps will be to curate our historical dataset and provide initial
 analysis, and, at the same time, prepare our real-time models to accept and
 act on tweets streamed directly from `tweet_scrape`.
+
+
+## Download data
+
+Snapshots of the data can be retrieved over the web from [appa.ndlug.org/tweets.tar.gz](tweets). You must be connected to the internal ND network (i.e. eduroam) to make a connection.
+
+[tweets][http://appa.ndlug.org/tweets.tar.gz]
