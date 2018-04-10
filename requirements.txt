@@ -1,2 +1,7 @@
+matplotlib
+nltk
+numpy
+sklearn
 tweepy
+twython
 wbutil
