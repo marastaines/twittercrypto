@@ -34,7 +34,8 @@ def mkpipeline(tweets):
     return Pipeline([
         ('vectorize', CountVectorizer(tokenizer=TweetTokenizer().tokenize)),
         ('kmeans', KMeans(n_clusters=2))]).fit(
-        np.random.choice(tweets, min(2000, len(tweets)), replace=False))
+        # np.random.choice(tweets, min(2000, len(tweets)), replace=False))
+        tweets)
 
 
 def write_clusters(clusters, tweets):
