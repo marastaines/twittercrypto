@@ -37,15 +37,17 @@ def mkpipeline(tweets):
         np.random.choice(tweets, min(2000, len(tweets)), replace=False))
 
 
+def write_clusters(clusters, tweets):
+    with ExitStack() as stack:
+        files = [stack.enter_context(open(f, 'w')) for f in ('0.txt', '1.txt')]
+        for t, c in zip(tweets, clusters):
+            files[c].write(dumps({'text': t}) + '\n')
+
+
 def main():
     with fileinput() as fs:
         tweets = list(load_tweets(fs))
-    kmeans = mkpipeline(tweets)
-
-    with ExitStack() as stack:
-        files = [stack.enter_context(open(f, 'w')) for f in ('0.txt', '1.txt')]
-        for t, c in zip(tweets, kmeans.predict(tweets)):
-            files[c].write(dumps({'text': t}) + '\n')
+    write_clusters(mkpipeline(tweets).predict(tweets), tweets)
 
 
 if __name__ == '__main__':

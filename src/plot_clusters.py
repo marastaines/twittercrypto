@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from fileinput import input as fileinput
 from sklearn.decomposition import TruncatedSVD
 
-from cluster2 import load_tweets, mkpipeline
+from cluster2 import load_tweets, mkpipeline, write_clusters
 
 COLORS = 'rb'
 
@@ -28,10 +28,13 @@ def main():
     svd = TruncatedSVD().fit_transform(t_vectors)
     clustering = pipeline.predict(tweets)
 
-    plt.title('Tweet Clusters w/ SVD to 2-dimensional space')
+    plt.title(f'Tweet Clusters w/ SVD to 2-dimensional '
+              f'space and {len(tweets)} tweets')
     for cluster, (x, y) in zip(clustering, svd):
         plt.scatter([x], [y], color=COLORS[cluster])
     plt.show()
+
+    write_clusters(clustering, tweets)
 
 
 if __name__ == '__main__':
