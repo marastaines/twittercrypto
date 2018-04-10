@@ -8,6 +8,7 @@ created: MAR 2018
 '''
 
 import tweepy
+from contextlib import suppress
 from json import dumps
 from wbutil import PersistentDict
 
@@ -47,9 +48,9 @@ class MyStreamListener(tweepy.StreamListener):
         self.batch.clear()
 
     def on_status(self, status):
-        try:
+        with suppress(Exception):
             self.count += 1
-            print(('Got tweet %d' % self.count), '\r', end='')
+            print('Got tweet {:,}'.format(self.count), '\r', end='')
             tweet = {
                 "id": status.id_str,
                 "text": status.text,
@@ -61,8 +62,6 @@ class MyStreamListener(tweepy.StreamListener):
             self.batch.append(dumps(tweet))
             if len(self.batch) >= self.batch_size:
                 self.write_batch()
-        except Exception:
-            pass
 
     def on_error(self, status_code):
         return False
