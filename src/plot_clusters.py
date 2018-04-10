@@ -13,6 +13,7 @@ created: APR 2018
 import matplotlib.pyplot as plt
 from fileinput import input as fileinput
 from sklearn.decomposition import TruncatedSVD
+from wbutil import lmap
 
 from cluster2 import load_tweets, mkpipeline, write_clusters
 
@@ -30,8 +31,8 @@ def main():
 
     plt.title(f'Tweet Clusters w/ SVD to 2-dimensional '
               f'space and {len(tweets)} tweets')
-    for cluster, (x, y) in zip(clustering, svd):
-        plt.scatter([x], [y], color=COLORS[cluster])
+
+    plt.scatter(svd[:,0], svd[:,1], c=lmap(COLORS.__getitem__, clustering))
     plt.show()
 
     write_clusters(clustering, tweets)
