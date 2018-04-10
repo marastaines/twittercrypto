@@ -33,7 +33,7 @@ def load_tweets(fs):
 def mkpipeline(tweets):
     return Pipeline([
         ('vectorize', CountVectorizer(tokenizer=TweetTokenizer().tokenize)),
-        ('kmenas', KMeans(n_clusters=2))]).fit(
+        ('kmeans', KMeans(n_clusters=2))]).fit(
         np.random.choice(tweets, min(2000, len(tweets)), replace=False))
 
 
