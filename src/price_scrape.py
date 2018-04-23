@@ -14,7 +14,7 @@ from wbutil import tryopen
 
 API_FMT = 'https://min-api.cryptocompare.com/data/{endpoint}'
 PRICE_URL = API_FMT.format(endpoint='price')
-HISTORICAL_URL = API_FMT.format(endpoint='pricehistorical')
+HISTORICAL_URL = API_FMT.format(endpoint='histohour')
 
 
 def get_price(coin, output='USD'):
@@ -24,8 +24,9 @@ def get_price(coin, output='USD'):
 
 def get_historical(coin, timestamp, output='USD'):
     res = r.get(HISTORICAL_URL, params={
-        'fsym': coin, 'tsyms': output, 'ts': str(int(timestamp))})
-    return res.json()[coin][output]
+        'fsym': coin, 'tsym': output, 'limit' : 1, 'toTs': str(int(timestamp))})
+    print(res.json())
+    return res.json()['Data'][-1]['close']
 
 
 def get_delta(coin, seconds_ago, output='USD'):
