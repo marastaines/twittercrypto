@@ -38,9 +38,10 @@ def mkpipeline(tweets):
         tweets)
 
 
-def write_clusters(clusters, tweets):
+def write_clusters(clusters, tweets, n_clusters=2):
     with ExitStack() as stack:
-        files = [stack.enter_context(open(f, 'w')) for f in ('0.txt', '1.txt')]
+        files = [stack.enter_context(open('{}.txt'.format(f), 'w'))
+                for f in range(n_clusters)]
         for t, c in zip(tweets, clusters):
             files[c].write(dumps({'text': t}) + '\n')
 
