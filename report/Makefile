@@ -4,6 +4,12 @@ report:
 	pdflatex main
 	pdflatex main
 
+final:
+	pdflatex final
+	bibtex final
+	pdflatex final
+	pdflatex final
+
 clean:
 	rm -f *.aux
 	rm -f *.bbl
@@ -14,4 +20,4 @@ clean:
 clean-all: clean
 	rm -f *.pdf
 
-.PHONY: report
+.PHONY: final
