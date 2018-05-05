@@ -61,13 +61,19 @@ provided in `src/`:
 Project has been completed, compile final.tex for report. General pipeline of scripts is 
 
 -Use selection.py to grab a subset of appa.out.txt
+
 -Run it through process_tweets.py to generate features
+
 -Use price_hist.py to get hourly prices over same date range
+
 -Use output of process_tweets.py as feature data and output of price_hist.py as target data in regression.py
 
 To remove noise:
+
 -build_model.py builds model on subset of data (you should use a file with < 100k tweets) and outputs .pkl files to disk
+
 -apply_model.py uses the vectorize and cluster models from disk on each tweet from a file and only outputs "relevant tweets"
+
 -Use the file from apply_model.py as input to process_tweets.py to generate features for this data, then proceed as above.
 
 
