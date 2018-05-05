@@ -120,7 +120,7 @@ if __name__ == '__main__':
     end_final = dt.datetime(2018, 4, 14, hour=0, minute=0, second=0)    #End of entire range
     start_loc = 0
 
-    out = open("instances.txt", "w+")
+    out = open("instances_without_noise.txt", "w+")
     while end_final >= end:
         print(str(end))
         print(end.timestamp())
